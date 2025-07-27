@@ -13,7 +13,7 @@ function RegisterPage() {
 
   const navigate = useNavigate();
 
-  const handleRegister = async (e: { preventDefault: () => void; }) => {
+  const handleRegister = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -36,13 +36,19 @@ function RegisterPage() {
       setContact("");
       setPassword("");
       setConfirmPassword("");
-
-      // Optional: Redirect after few seconds
+      
       setTimeout(() => {
         navigate("/login");
       }, 1500);
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+    } catch (err: unknown) {
+      // Type-safe error handling:
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Registration failed");
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Registration failed");
+      }
     }
   };
 

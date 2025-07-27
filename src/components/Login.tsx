@@ -6,10 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
+  const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     try {
@@ -20,10 +19,8 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      console.error("Login failed:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Login failed");
+      console.error("Login failed:", err);
     }
-
   };
 
   return (
@@ -47,8 +44,6 @@ const Login = () => {
         <div className="w-full md:w-1/2 bg-white flex items-center justify-center px-8 py-12">
           <form className="w-full max-w-md space-y-6 text-gray-900" onSubmit={handleLogin}>
             <h2 className="text-3xl font-extrabold text-indigo-700 text-center">Login</h2>
-
-            {error && <p className="text-red-500 text-center">{error}</p>}
 
             <div className="relative">
               <input
